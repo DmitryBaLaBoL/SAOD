@@ -10,10 +10,22 @@ public class FunctionForArray {
         }
     }
 
-    /** Последовательный поиск значения element в массиве Arr*/
-    public static int SearchElementInArray(int[] Arr,int element){
+
+    //todo: Equels
+    /** Последовательный поиск значения element в целочисленном массиве Arr*/
+    public static int SearchElementInArrayInt(int[] Arr,int element){
         for (int i = 0;i < Arr.length;i++) {
             if(Arr[i] == element) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /** Последовательный поиск значения element в массиве Arr*/
+    public static <T> int SearchElementInArray(T[] Arr,T element){
+        for (int i = 0;i < Arr.length;i++) {
+            if(Arr[i].equals(element)) {
                 return i;
             }
         }
@@ -40,34 +52,54 @@ public class FunctionForArray {
         return -1;
     }
 
+    //todo: Не работает т.к. оператор <
+    /** Бинарный поиск значения element в массиве Arr
+     (Только для заранее отсортированного массива)
+     public static <T> int BinarySearchElementInArray(T[] Arr,T element) {
+     int start = 0;
+     int end = Arr.length - 1;
+     while (start <= end) {
+     int middle = start + (end - start) / 2;
+     if (Arr[middle] == element) {
+     return middle;
+     }
+     else if(Arr[middle] < element) {
+     start = middle + 1;
+     }
+     else {
+     end = middle - 1;
+     }
+     }
+     return -1;
+     }*/
+
     /** Интерполяционный поиск элемента element в массиве Arr
      (Только для заранее отсортированного массива)*/
     public static int InterpolationSearch(int[] Arr, int element) {
 
-        int highEnd = (Arr.length - 1);
-        int lowEnd = 0;
+        int startIndex = 0;
+        int lastIndex = (Arr.length - 1);
 
-        while (element >= Arr[lowEnd] && element <= Arr[highEnd] && lowEnd <= highEnd) {
+        while ((startIndex <= lastIndex) && (element > Arr[startIndex]) &&
+                (element < Arr[lastIndex])) {
+            // используем формулу интерполяции для поиска возможной лучшей позиции для существующего элемента
+            int pos = startIndex + (((lastIndex-startIndex) /
+                    (Arr[lastIndex]-Arr[startIndex]))*
+                    (element - Arr[startIndex]));
 
-            int probe = lowEnd + (highEnd - lowEnd) * (element - Arr[lowEnd]) / (Arr[highEnd] - Arr[lowEnd]);
+            if (Arr[pos] == element)
+                return pos;
 
-            if (highEnd == lowEnd) {
-                if (Arr[lowEnd] == element) {
-                    return lowEnd;
-                } else {
-                    return -1;
-                }
-            }
+            if (Arr[pos] < element)
+                startIndex = pos + 1;
 
-            if (Arr[probe] == element) {
-                return probe;
-            }
-
-            if (Arr[probe] < element) {
-                lowEnd = probe + 1;
-            } else {
-                highEnd = probe - 1;
-            }
+            else
+                lastIndex = pos - 1;
+        }
+        if(Arr[startIndex] == element){
+            return startIndex;
+        } else if (Arr[lastIndex] == element) {
+            return lastIndex;
         }
         return -1;
     }
