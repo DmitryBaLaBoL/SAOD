@@ -1,7 +1,6 @@
 package org.example;
 
 import static org.example.FunctionForArray.*;
-import static org.example.FunctionForArray.SearchElementInArrayInt;
 
 public class Main {
     public static void main(String[] args) {
