@@ -2,6 +2,27 @@ package org.example;
 
 public class FunctionForArraySorts {
 
+    /** Функция проверяет отсортирован ли массив*/
+    public static boolean HasSortArray(Integer[] Arr) {
+        for(int i = 0; i < Arr.length - 1;i++) {
+            if (Arr[i] <= Arr[i + 1]) {
+                continue;
+            }
+            else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**Заполнение массива случайными целыми числами от min, до max*/
+    public static void Random_Array(Integer[] Arr,int min,int max) {
+        int n = Arr.length;
+        for	(int i = 0; i < n;i++) {
+            Arr[i] = (int)(Math.random() * (max - min) + min);
+        }
+    }
+
     /** Функция сортировки пузырьком массива Arr*/
     public static void SimpleSortArray(Integer[] Arr) {
         Integer between;
@@ -52,14 +73,14 @@ public class FunctionForArraySorts {
     /** Быстрая сортировка массива arr
      * low - индекс первого элемента
      * high - индекс последнего элемента*/
-    public static void QuickSort(Integer[] arr, Integer low, Integer high) {
+    public static void QuickArraySort(Integer[] arr, Integer low, Integer high) {
         if (low < high) {
             // pi - средний элемент, чтобы понять откуда запустить рекурсию
             int pi = partition(arr, low, high);
 
             // Запускаем тот же алгоритм, только теперь для половинок массива
-            QuickSort(arr, low, pi - 1);
-            QuickSort(arr, pi + 1, high);
+            QuickArraySort(arr, low, pi - 1);
+            QuickArraySort(arr, pi + 1, high);
         }
     }
 
@@ -93,4 +114,36 @@ public class FunctionForArraySorts {
 
         return i + 1;
     }
+
+    /** Сортировка Шелла */
+    public static void ShellArraySort(Integer[] array)
+    {
+        int n = array.length;
+
+
+        // Start with a maximum gap, then reduce it
+        for (int gap = n/2; gap > 0; gap /= 2)
+        {
+            // Apply insertion sort to the current gap size.
+            for (int i = gap; i < n; i += 1)
+            {
+                int temp = array[i];
+
+
+                // shift earlier sorted elements until
+                // the correct position for a[i] is found
+                int j;
+                for (j = i; j >= gap && array[j - gap] > temp; j -= gap)
+                {
+                    array[j] = array[j - gap];
+                }
+
+
+                // put the original a[i] stored in temp in its correct position
+                array[j] = temp;
+            }
+        }
+    }
+
+
 }
