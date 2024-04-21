@@ -4,10 +4,31 @@ package org.example;
 import org.example.Node.*;
 import org.example.List.*;
 
+import java.awt.geom.Arc2D;
+
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
 
+        ListGenerics<Integer> Jen = new ListGenerics<>(3);
+        Jen.addEnd(12);
+        Jen.addEnd(3);
+        Jen.addEnd(100);
+        Jen.addStart(4);
+        Jen.addStart(-25);
+        Jen.add(255,4);
+        Jen.add(1255,3);
+        Jen.deleteEnd();
+        Jen.deleteStart();
+        Jen.delete(1);
+        Jen.delete(4);
+        //Jen.deleteStart();
+        System.out.println(Jen.toString());
+        Jen.sortShell();
+        System.out.println(Jen.toString());
+
+
+        /*
         List A = new List(1);
         A.addEnd(2);
         A.addEnd(3);
@@ -39,7 +60,7 @@ public class Main {
         System.out.println(A.toString());
         A.delete(10);
         System.out.println(A.toString());
-
+        */
 
 
 

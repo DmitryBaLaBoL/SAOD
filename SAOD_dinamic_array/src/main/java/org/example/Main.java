@@ -1,3 +1,4 @@
+//Author: Tikhonov Dmitry
 package org.example;
 
 import org.example.DinamicArray.*;
@@ -6,31 +7,31 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
 
-        DinamicArray Arr = new DinamicArray(2);
+        DinamicArrayJenerics<Double> Arr = new DinamicArrayJenerics<>(2);
         System.out.println(Arr.toString());
-        Arr.AddInEndElement(1);
+        Arr.AddInEndElement(1.0);
         System.out.println(Arr.toString());
-        Arr.AddInEndElement(2);
+        Arr.AddInEndElement(2.0);
         System.out.println(Arr.toString());
-        Arr.AddInEndElement(3);
+        Arr.AddInEndElement(3.0);
         System.out.println(Arr.toString());
-        Arr.AddInEndElement(4);
+        Arr.AddInEndElement(4.0);
         System.out.println(Arr.toString());
-        Arr.AddInEndElement(5);
+        Arr.AddInEndElement(5.0);
         System.out.println(Arr.toString());
         Arr.DeleteElement(2);
         System.out.println(Arr.toString());
-        Arr.AddInEndElement(5);
+        Arr.AddInEndElement(5.0);
         System.out.println(Arr.toString());
-        Arr.AddElement(22,3);
+        Arr.AddElement(22.0,3);
         System.out.println(Arr.toString());
-        Arr.AddInEndElement(5);
+        Arr.AddInEndElement(5.0);
         System.out.println(Arr.toString());
-        Arr.AddInEndElement(5);
+        Arr.AddInEndElement(5.0);
         System.out.println(Arr.toString());
-        Arr.SortArray();
+        //Arr.SortArray();
         System.out.println(Arr.toString());
-        System.out.println(Arr.SearchElement(4));
+        System.out.println(Arr.SearchElement(22.0));
 
 
     }

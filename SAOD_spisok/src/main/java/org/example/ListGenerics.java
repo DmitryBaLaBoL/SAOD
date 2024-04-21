@@ -1,37 +1,36 @@
 // Author: Tikhonov Dmitry
 package org.example;
 
-import org.example.Node.*;
-
-/**  */
-public class List {
+/** Класс списка
+ * с заданием разного типа данных */
+public class ListGenerics<T> {
 
     /** Указатель на голову списка*/
-    private Node Head;
+    private NodeJenerics Head;
 
     /** Указатель на конец списка*/
-    private Node End;
+    private NodeJenerics End;
 
-    /** Количество элментов в списке */
+    /** Количество элементов в списке */
     private int CountNumbers;
 
     /** Создаётся список по умолчанию, с 1 элементом = 0 */
-    List(){
-        Head = new Node(0,null,null);
+    ListGenerics(){
+        Head = new NodeJenerics(null,null,null);
         End = Head;
         CountNumbers = 1;
     }
 
     /** Создаётся список, с 1 элементом = Data */
-    List(int Data){
-        Head = new Node(Data,null,null);
+    ListGenerics(T Data){
+        Head = new NodeJenerics(Data,null,null);
         End = Head;
         CountNumbers = 1;
     }
 
     /** Добавление элемента Data в конец списка */
-    public void addEnd(int Data){
-        Node between = new Node(Data,null,null);
+    public void addEnd(T Data){
+        NodeJenerics between = new NodeJenerics(Data,null,null);
         End.next = between;
         between.prev = End;
         End = between;
@@ -39,8 +38,8 @@ public class List {
     }
 
     /** Добавление элемента Data в начало списка */
-    public void addStart(int Data){
-        Node between = new Node(Data,null,null);
+    public void addStart(T Data){
+        NodeJenerics between = new NodeJenerics(Data,null,null);
         Head.prev = between;
         between.next = Head;
         Head = between;
@@ -48,7 +47,7 @@ public class List {
     }
 
     /** Добавление элемента Data в позицию n списка */
-    public void add(int Data, int n){
+    public void add(T Data, int n){
 
         if (n < 0 || n > CountNumbers){
             return;
@@ -60,8 +59,8 @@ public class List {
             this.addEnd(Data);
         }
 
-        Node between = new Node(Data,null,null);
-        Node between1 = Head;
+        NodeJenerics between = new NodeJenerics(Data,null,null);
+        NodeJenerics between1 = Head;
         int count = 2;
         while(count != n){
             between1 = between1.next;
@@ -106,14 +105,19 @@ public class List {
             Head.data = 0;
             return;
         }
+        if (n < 1 || n > CountNumbers){
+            return;
+        }
         if (n == 1){
             this.deleteStart();
+            return;
         }
         if (n == CountNumbers){
             this.deleteEnd();
+            return;
         }
         int count = 1;
-        Node between = Head;
+        NodeJenerics between = Head;
         while (count != n){
             between = between.next;
             count++;
@@ -123,10 +127,22 @@ public class List {
         CountNumbers--;
     }
 
+    /** Просмотр списка */
+    @Override
+    public String toString(){
+        NodeJenerics between = Head;
+        String result = "";
+        while (between != null){
+            result = result + between.data + " ";
+            between = between.next;
+        }
+        return result;
+    }
+
     /** Поиск элемента Data в списке
      * Если такого элемента в списке нет вернется -1*/
-    public int search(int Data){
-        Node between = Head;
+    public int search(T Data){
+        NodeJenerics between = Head;
         int count = 1;
         while (between != null){
             if (between.data == Data){
@@ -139,10 +155,10 @@ public class List {
     }
 
     /** Сортировка списка по возрастанию */
-    public void sort(){
-        int between;
-        for (Node i = Head; i != null; i = i.next){
-            for (Node j = i.next; j != null; j = j.next){
+    /*public void sort(){
+        T between;
+        for (NodeJenerics i = Head; i != null; i = i.next){
+            for (NodeJenerics j = i.next; j != null; j = j.next){
                 if (i.data > j.data) {
                     between = i.data;
                     i.data = j.data;
@@ -150,13 +166,41 @@ public class List {
                 }
             }
         }
+    }*/
+
+    /** Сортировка списка методом Шелла по возрастанию */
+    public void sortShell()
+    {
+
+        int n = CountNumbers;
+
+        //Начнаем с максимального gap, затем уменьшаем его
+        for (int gap = n/2; gap > 0; gap /= 2)
+        {
+            // Применяем сортировку вставкой к текущему размеру gap
+            for (int i = gap; i < n; i += 1)
+            {
+                T temp = this.getData(i);
+
+
+                /* сдвигаем ранее отсортированные элементы до тех пор, пока
+                 не найдена правильная позиция для this.getData(i) */
+                int j;
+                for (j = i; j >= gap && (Integer)this.getData(j - gap) > (Integer) temp; j -= gap)
+                {
+                    this.setData(this.getData(j - gap),j);
+                }
+
+                // помещаем исходный i, хранящийся в temp, в правильное положение
+                this.setData(temp,j);
+            }
+        }
     }
-    //todo:*/
 
     /** Конкатенация списков, добавление списка list в конец к этому
-     * todo: */
-    public void concatenation(List list){
-        Node between  = list.getNode(1);
+     * получается this = this + list */
+    public void concatenation(ListGenerics list){
+        NodeJenerics between  = list.getNode(1);
         End.next = between;
         between.prev = End;
         while (between.next != null){
@@ -175,39 +219,49 @@ public class List {
         End = Head;
     }
 
-    /** Получение узла списка с индексом n */
-    public Node getNode(int n){
-        Node between = Head;
+    /** Получение узла списка с индексом n
+     * если такого узла нет вернется null*/
+    public NodeJenerics getNode(int n){
+        NodeJenerics between = Head;
         int count = 1;
         while (count != n){
             between = between.next;
             count++;
+            if (between == null){
+                return null;
+            }
         }
         return between;
-        //todo: Если нет
     }
 
-    /** Просмотр списка */
-    @Override
-    public String toString(){
-        Node between = Head;
-        String result = "";
-        while (between != null){
-            result = result + between.data + " ";
+    /** Получение данных узла списка с индексом n
+     * если такого узла нет вернется null*/
+    public T getData(int n){
+        NodeJenerics between = Head;
+        int count = 0;
+        while (count != n){
             between = between.next;
+            count++;
+            if (between == null){
+                return null;
+            }
         }
-        return result;
+        return (T) between.data;
     }
 
-    /** Просмотр списка наоборот */
-    public String ToString(){
-        Node between = End;
-        String result = "";
-        while (between != null){
-            result = result + between.data + " ";
-            between = between.prev;
+    /** Установка данных узла списка по индексу n
+     * если такого узла нет ничего не произойдёт */
+    public void setData(T Data,int n){
+        NodeJenerics between = Head;
+        int count = 0;
+        while (count != n){
+            between = between.next;
+            count++;
+            if (between == null){
+                return;
+            }
         }
-        return result;
-    }
+        between.data = Data;
 
+    }
 }

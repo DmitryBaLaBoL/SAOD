@@ -1,20 +1,19 @@
-// Author: Tikhonov Dmitry
 package org.example;
 
-/** Класс узла списка */
-public class Node {
+/** Класс узла использующий шаблонный тип узла */
+public class NodeJenerics<T> {
 
     /** Данные узла списка */
-    public int data;
+    public T data;
 
     /** Указатель на следующий узел */
-    public Node next;  // адрес след. эл-та
+    public NodeJenerics<T> next;  // адрес след. эл-та
 
     /** Указатель на предыдущий узел */
-    public Node prev;
+    public NodeJenerics<T> prev;
 
     /** Конструктор узла с данными Data и указателями на узлы next и prev = null */
-    Node(int Data){
+    NodeJenerics(T Data){
         this.data = Data;
         this.next = null;
         this.prev = null;
@@ -25,7 +24,7 @@ public class Node {
      * С данными Data
      * Следующим узлом Next
      * Предыдущим узлом Prev */
-    Node(int Data, Node Next, Node Prev){
+    NodeJenerics(T Data, NodeJenerics Next, NodeJenerics Prev){
         this.data = Data;
         this.next = Next;
         this.prev = Prev;

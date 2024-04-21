@@ -1,10 +1,7 @@
-//Author: Tikhonov Dmitry
 package org.example;
 
-/** Класс динамического массива*/
-public class DinamicArray {
-    // todo: test
-    /* Правило 5 в Java
+public class DinamicArrayJenerics<T> {
+     /* Правило 5 в Java
     1. Так как в яве есть сборщик мусора, нам не нужно самим освобождать память,
     поэтому деуструктор писать необходимости нет
     2. Конструктор копирования реализован
@@ -15,41 +12,35 @@ public class DinamicArray {
     * */
 
     /** Главный массив класса */
-    private int[] MainArray;
+    private T[] MainArray;
 
     /** Индекс текущего элемента */
     private int ActualIndex;
 
     /** Конструктор без параметров
-     * //todo: Проверить коменты*/
-    DinamicArray(){
-        MainArray = new int [100];
+     * По-умолчанию создается массив из 100 элементов*/
+    DinamicArrayJenerics(){
+        MainArray = (T[]) new Object [100];
         ActualIndex = 0;
     }
 
     /** Конструктор с параметрами, где n - размер массива
      *  Если N меньше или равно 0 создаётся массив по умолчанию */
-    DinamicArray(int n){
+    DinamicArrayJenerics(int n){
         if (n <= 0){
-            MainArray = new int [100];
+            MainArray = (T[]) new Object [100];
             ActualIndex = 0;
             return;
         }
-        MainArray = new int [n];
+        MainArray = (T[]) new Object [n];
         ActualIndex = 0;
     }
 
-    /** Конструктор копирования */
-    DinamicArray(DinamicArray a){
-        MainArray = a.MainArray;
+    /** Конструктор перемещения */
+    DinamicArrayJenerics(DinamicArrayJenerics a){
+        MainArray = (T[]) a.MainArray;
         ActualIndex = a.ActualIndex;
     }
-
-    /** Конструктор перемещения
-    DinamicArray(DinamicArray a){
-        MainArray = a.MainArray;
-        ActualIndex = a.ActualIndex;
-    }*/
 
     /** Проверка на нехватку размера массива */
     private boolean CheckLowSizeArray(){
@@ -63,7 +54,7 @@ public class DinamicArray {
 
     /** Увеличение размера массива в 2 раза */
     private void IncreaseSize(){
-        int[] Arr = new int[MainArray.length * 2];
+        T[] Arr = (T[]) new Object[MainArray.length * 2];
         for (int i = 0; i < MainArray.length;i++){
             Arr[i] = MainArray[i];
         }
@@ -72,23 +63,23 @@ public class DinamicArray {
 
     /** Ученьшение размера массива в 2 раза */
     private void DecreaseSize(){
-        int[] Arr = new int[MainArray.length / 2];
+        T[] Arr = (T[]) new Object[MainArray.length / 2];
         for (int i = 0; i < ActualIndex;i++){
             Arr[i] = MainArray[i];
         }
         MainArray = Arr;
     }
 
-    /** Просмотр элемента массива */
-    public int GetElement(int El){
-        if (El >= MainArray.length || El < 0){
-            return MainArray.length;
+    /** Просмотр элемента массива по индексу n */
+    public T GetElement(int n){
+        if (n >= MainArray.length || n < 0){
+            return null;
         }
-        return MainArray[El];
+        return MainArray[n];
     }
 
-    /** Добавление элемента в конец массива */
-    public void AddInEndElement(int El){
+    /** Добавление элемента El в конец массива */
+    public void AddInEndElement(T El){
         MainArray[ActualIndex] = El;
         if (CheckLowSizeArray()){
             IncreaseSize();
@@ -98,14 +89,14 @@ public class DinamicArray {
 
     /** Добавление элемента El в массив с индексом n
      * Если такого индекса нет, ничего не произойдёт */
-    public void AddElement(int El, int n){
+    public void AddElement(T El, int n){
         if (n < 0 || n > ActualIndex - 1){return;}
         if (n == ActualIndex - 1){
             AddInEndElement(El);
             return;
         }
         //
-        int[] Arr = new int[MainArray.length + 1];
+        T[] Arr = (T[]) new Object [MainArray.length + 1];
         for (int i = 0;i < n - 1;i++){
             Arr[i] = MainArray[i];
         }
@@ -121,20 +112,21 @@ public class DinamicArray {
     public void DeleteEndElement(){
         if (ActualIndex == 1) return;
         ActualIndex--;
-        MainArray[ActualIndex] = 0;
+        MainArray[ActualIndex] = null;
         if (CheckHighSizeArray()){
             DecreaseSize();
         }
     }
 
-    /** Удаление элемента с индексом n из массива */
+    /** Удаление элемента с индексом n из массива
+     * Если такго индекса нет, ничего не произойдёт */
     public void DeleteElement(int n){
         if (n < 0 || n > ActualIndex - 1){return;}
         if (n == ActualIndex - 1){
             DeleteEndElement();
             return;
         }
-        int[] Arr = new int[MainArray.length - 1];
+        T[] Arr = (T[]) new Object [MainArray.length - 1];
         for (int i = 0;i < n - 1;i++){
             Arr[i] = MainArray[i];
         }
@@ -145,22 +137,13 @@ public class DinamicArray {
         MainArray = Arr;
     }
 
-    /** Просмотр массива */
-    @Override
-    public String toString(){
-        String Result = "";
-        for (int i = 0; i < MainArray.length;i++){
-            Result = Result + MainArray[i] + " ";
-        }
-        return Result;
-    }
-
-    /** Сортировки пузырьком массива по возрастанию */
+    /** Сортировки пузырьком массива по возрастанию
+     * Сортировка работает только, если тип массива Integer */
     public void SortArray() {
-        int between;
+        T between;
         for (int i = 0; i < ActualIndex - 1; i++) {
             for (int j = i + 1; j < ActualIndex; j++) {
-                if (MainArray[i] > MainArray[j]) {
+                if ((Integer)MainArray[i] > (Integer) MainArray[j]) {
                     between = MainArray[i];
                     MainArray[i] = MainArray[j];
                     MainArray[j] = between;
@@ -169,10 +152,11 @@ public class DinamicArray {
         }
     }
 
-    /** Поиск элемента El в массиве */
-    public int SearchElement(int El){
+    /** Поиск элемента El в массиве
+     * Если такого элемента нет, вернётся -1 */
+    public int SearchElement(T El){
         for (int i = 0; i < ActualIndex; i++){
-            if (MainArray[i] == El){
+            if ((T)MainArray[i] == (T)El){
                 return i + 1;
             }
         }
@@ -180,20 +164,18 @@ public class DinamicArray {
     }
 
     /** Изменение размера массива на n элементов
-     * ....*/
+     * Если n <= 0, то создаётся пустой массив*/
     public void ResizeArray(int n){
-        // Проверка на 0 и на >
-
         // Если элементов 0, то создаётся пустой массив
-        if (n == 0){
+        if (n <= 0){
             ActualIndex = 0;
-            int[] Arr = new int[ActualIndex + 1];
+            T[] Arr = (T[])new Object[ActualIndex + 1];
             MainArray = Arr;
             return;
         }
         // Если n > Actualendex
         if (n > ActualIndex){
-            int[] Arr = new int[n];
+            T[] Arr = (T[])new Object[n];
             for (int i = 0; i < ActualIndex;i++){
                 Arr[i] = MainArray[i];
             }
@@ -202,11 +184,29 @@ public class DinamicArray {
         }
         // Если n > 0 но n < ActualEndex
         ActualIndex = n + 1;
-        int[] Arr = new int[ActualIndex];
+        T[] Arr = (T[])new Object[ActualIndex];
         for (int i = 0; i < ActualIndex;i++){
             Arr[i] = MainArray[i];
         }
         MainArray = Arr;
     }
 
+    /** Просмотр массива только заполненной части */
+    @Override
+    public String toString(){
+        String Result = "";
+        for (int i = 0; i < ActualIndex;i++){
+            Result = Result + MainArray[i] + " ";
+        }
+        return Result;
+    }
+
+    /** Просмотр всеё длины массива даже не заполненное */
+    public String ToString(){
+        String Result = "";
+        for (int i = 0; i < MainArray.length;i++){
+            Result = Result + MainArray[i] + " ";
+        }
+        return Result;
+    }
 }
